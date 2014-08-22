@@ -1,0 +1,48 @@
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+
+public class Recommend {
+	public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+
+        if (args.length != 2) {
+            System.err.println("Usage: Recommend <keyword> <number>");
+            System.exit(2);
+        }
+
+        private final Path setpath; // hbase 경로설정
+        private final Path outpath;
+        // Fianl 변수로 경로 설정
+
+        for() {
+
+            //keyword가 들어있는, 문서 찾아야댐
+
+
+
+            Job job = new Job(conf, "Recommend");
+
+            job.setJarByClass(Recommend.class);
+            job.setMapperClass(Mapper.class);
+            job.setReducerClass(Reducer.class);
+
+            job.setInputFormatClass(TextInputFormat.class); // Hbase 저장 형식이 뭔지 모르겟어서.. 일단 텍스트
+            job.setOutputFormatClass(TextOutputFormat.class);
+
+            job.setOutputKeyClass(Text.class);
+            job.setOutputValueClass(IntWritable.class);
+
+            FileInputFormat.addInputPath(job, setpath); // Hbase로 부터 읽기할 경로
+            FileOutputFormat.setOutputPath(job, outpath); // Hbase 에 저장경로
+
+            job.waitForCompletion(true);
+        };
+	}
+}
