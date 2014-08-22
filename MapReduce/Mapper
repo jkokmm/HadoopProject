@@ -1,0 +1,24 @@
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class Mapper extends
+		Mapper<LongWritable, Text, Text, IntWritable> {
+
+	private final static IntWritable one = new IntWritable(1);
+
+	public void map(LongWritable key, Text value, Context context)
+			throws IOException, InterruptedException {
+
+        String[] tokens = value.toString().split(" "); // 공백으로 구분
+
+// 구분한것들 조사,접속사,온점(.) 같은거 구분시켜야댐 ex) 은,는,이,가, 그래서
+
+           for(String token : tokens){
+                context.write(new Text(token),one);
+             }
+         }
+        }
