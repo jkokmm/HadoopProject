@@ -1,0 +1,44 @@
+package kr.ac.inha;
+
+import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
+import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
+import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
+import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.impl.model.file.*;
+import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.apache.mahout.cf.taste.similarity.UserSimilarity;
+
+import java.io.File;
+import java.util.List;
+
+/**
+ * Created by yom on 2014-07-21.
+ */
+public class SampleRecommender {
+
+    public static void main(String[] args) throws Exception {
+
+        DataModel model = new FileDataModel(new File("input.csv"));
+        //데이터셋
+
+        UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
+        //각 모델 간의 상관관계를 분석
+
+        UserNeighborhood neighborhood = new NearestNUserNeighborhood(2, similarity, model);
+        //가장 유사도가 비슷한 두 그룹을 설정
+
+        Recommender recommender =  new GenericUserBasedRecommender(model, neighborhood, similarity);
+        //추천기 생성
+
+
+        List<RecommendedItem> recommendations = recommender.recommend(1, 1);
+        //추천 값 저장 만약에 1,2 라면 1번 사용자에 맞는 2가지를 추천
+
+        for(RecommendedItem recommendation : recommendations){
+            System.out.println(recommendation);
+        }
+        //출력
+    }
+}
